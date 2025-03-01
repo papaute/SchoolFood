@@ -78,7 +78,7 @@ class _MealsScreenState extends State<MealsScreen> {
       name: 'Рис отварной с маслом',
       calories: 143,
       proteins: 6,
-      fats: 5,
+      fats: 200,
       carbs: 16,
     ),
     Dish(
@@ -103,21 +103,23 @@ class _MealsScreenState extends State<MealsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:  Color.fromARGB(255, 234, 241, 203),
+         
+       
+      backgroundColor: const Color.fromARGB(255, 234, 241, 203),
       appBar: AppBar(
+        
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF78B04C)),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           widget.mealType,
           style: const TextStyle(
             fontFamily: 'DelaGothicOne',
-            color: Color(0xFF78B04C)
-
-,
+             
+            fontSize: 20,
           ),
         ),
       ),
@@ -132,8 +134,9 @@ class _MealsScreenState extends State<MealsScreen> {
               child: Container(
                 height: 48,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF8AB77B),
+                 color: Color(0xFF78B04C),
                   borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: const Color(0xFF78B04C)),
                 ),
                 child: TextField(
                   onChanged: (value) {
@@ -142,14 +145,18 @@ class _MealsScreenState extends State<MealsScreen> {
                     });
                   },
                   style: const TextStyle(
-                    fontFamily: 'DelaGothicOne',
-                    color: Colors.white,
+                    fontFamily: 'Montserrat',
+                    color: Color(0xFF78B04C),
                   ),
                   decoration: InputDecoration(
                     hintText: 'Поиск блюда',
                     hintStyle: TextStyle(
-                      fontFamily: 'DelaGothicOne',
-                      color: Colors.white.withOpacity(0.7),
+                      fontFamily: 'Montserrat',
+                      color: const Color(0xFF78B04C).withOpacity(0.7),
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      color: Color(0xFF78B04C),
                     ),
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16),
@@ -160,21 +167,14 @@ class _MealsScreenState extends State<MealsScreen> {
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [ 
-
-                _buildFilterButton('Все'
-               
-                , showAllDishes, () {
+              children: [
+                _buildFilterButton('Все', showAllDishes, () {
                   setState(() {
-                    Color(0xFF78B04C);
-
                     showAllDishes = true;
                   });
                 }),
                 _buildFilterButton('Мои продукты', !showAllDishes, () {
                   setState(() {
-                    Color(0xFF78B04C);
-
                     showAllDishes = false;
                   });
                 }),
@@ -183,9 +183,12 @@ class _MealsScreenState extends State<MealsScreen> {
             const SizedBox(height: 16),
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 92, 142, 53),
-                  borderRadius: BorderRadius.circular(16),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
                 ),
                 child: ListView(
                   padding: const EdgeInsets.all(16),
@@ -207,17 +210,21 @@ class _MealsScreenState extends State<MealsScreen> {
     return TextButton(
       onPressed: onTap,
       style: TextButton.styleFrom(
-        backgroundColor: isActive ? const Color(0xFF8AB77B) : Colors.transparent,
+        backgroundColor: isActive ? const Color(0xFF78B04C) : Colors.transparent,
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
+          side: BorderSide(
+            color: const Color(0xFF78B04C),
+            width: isActive ? 0 : 2,
+          ),
         ),
       ),
       child: Text(
         text,
         style: TextStyle(
           fontFamily: 'DelaGothicOne',
-          color: Colors.white,
+          color: isActive ? const Color.fromARGB(255, 255, 255, 255) : const Color(0xFF78B04C),
           fontSize: isActive ? 16 : 14,
         ),
       ),
@@ -229,8 +236,9 @@ class _MealsScreenState extends State<MealsScreen> {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF8AB77B),
+        
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFF78B04C)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,7 +250,7 @@ class _MealsScreenState extends State<MealsScreen> {
                   dish.name,
                   style: const TextStyle(
                     fontFamily: 'DelaGothicOne',
-                    color: Colors.white,
+                    color: Color(0xFF78B04C),
                     fontSize: 16,
                   ),
                 ),
@@ -259,7 +267,7 @@ class _MealsScreenState extends State<MealsScreen> {
                   );
                   Navigator.pop(context);
                 },
-                fillColor: MaterialStateProperty.all(Colors.white),
+                fillColor: MaterialStateProperty.all(const Color(0xFF78B04C)),
               ),
             ],
           ),
@@ -268,7 +276,7 @@ class _MealsScreenState extends State<MealsScreen> {
             'Ккал ${dish.calories}',
             style: const TextStyle(
               fontFamily: 'DelaGothicOne',
-              color: Colors.white,
+              color: Color(0xFF78B04C),
               fontSize: 14,
             ),
           ),
@@ -276,7 +284,7 @@ class _MealsScreenState extends State<MealsScreen> {
             'Белки ${dish.proteins}г  Жиры ${dish.fats}г  Углеводы ${dish.carbs}г',
             style: const TextStyle(
               fontFamily: 'DelaGothicOne',
-              color: Colors.white,
+              color: Color(0xFF78B04C),
               fontSize: 14,
             ),
           ),

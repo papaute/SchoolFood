@@ -181,21 +181,28 @@ class _MealItemState extends State<MealItem> {
 }
 
 class DiaryScreen extends StatefulWidget {
-  const DiaryScreen({super.key});
+  final bool showNavBar;
+
+  const DiaryScreen({
+    super.key,
+    this.showNavBar = false,
+  });
 
   @override
   State<DiaryScreen> createState() => _DiaryScreenState();
 }
 
 class _DiaryScreenState extends State<DiaryScreen> {
-  int totalCalories = 800;
-  double totalProteins = 20;
-  double totalFats = 25;
-  double totalCarbs = 55;
+  int _waterGlasses = 0;
+  bool _showWaterSticker = false;
+  int _totalCalories = 0;
+  double _totalProteins = 0;
+  double _totalFats = 0;
+  double _totalCarbs = 0;
   final int dailyCalorieGoal = 1900;
 
   Map<String, MealData> meals = {
-    'Завтрак': MealData(calories: 800, proteins: 20, fats: 25, carbs: 55),
+    'Завтрак': MealData(calories: 0, proteins: 0, fats: 0, carbs: 0),
     'Обед': MealData(calories: 0, proteins: 0, fats: 0, carbs: 0),
     'Ужин': MealData(calories: 0, proteins: 0, fats: 0, carbs: 0),
   };
@@ -210,10 +217,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
       );
 
       // Обновляем общие значения
-      totalCalories = meals.values.fold(0, (sum, meal) => sum + meal.calories);
-      totalProteins = meals.values.fold(0.0, (sum, meal) => sum + meal.proteins);
-      totalFats = meals.values.fold(0.0, (sum, meal) => sum + meal.fats);
-      totalCarbs = meals.values.fold(0.0, (sum, meal) => sum + meal.carbs);
+      _totalCalories = meals.values.fold(0, (sum, meal) => sum + meal.calories);
+      _totalProteins = meals.values.fold(0.0, (sum, meal) => sum + meal.proteins);
+      _totalFats = meals.values.fold(0.0, (sum, meal) => sum + meal.fats);
+      _totalCarbs = meals.values.fold(0.0, (sum, meal) => sum + meal.carbs);
     });
   }
 
@@ -223,7 +230,12 @@ class _DiaryScreenState extends State<DiaryScreen> {
       backgroundColor: const Color(0xFFF5F5DC),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(AppConstants.spacing),
+          padding: EdgeInsets.fromLTRB(
+            AppConstants.spacing,
+            AppConstants.spacing,
+            AppConstants.spacing,
+            widget.showNavBar ? AppConstants.spacing + 92 : AppConstants.spacing,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -247,15 +259,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 ],
               ),
               const SizedBox(height: AppConstants.spacing),
-              CaloriesCard(
-                totalCalories: totalCalories,
-                dailyCalorieGoal: dailyCalorieGoal,
-                totalProteins: totalProteins,
-                totalFats: totalFats,
-                totalCarbs: totalCarbs,
-              ),
+              _buildCaloriesCard(),
               const SizedBox(height: AppConstants.spacing),
-              const WaterReminderCard(),
+              _buildWaterGlasses(),
               const SizedBox(height: AppConstants.spacing),
               _buildMealsList(context),
             ],
@@ -301,6 +307,218 @@ class _DiaryScreenState extends State<DiaryScreen> {
       ),
     );
   }
+
+  Widget _buildWaterGlasses() {
+    return Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(AppConstants.cardPadding),
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: AssetImage('assets/images/water.png'),
+              fit: BoxFit.cover,
+            ),
+            borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Не забывайте\nпить воду!',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: AppConstants.spacing),
+              if (_waterGlasses >= 8)
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                         color: Colors.white24,
+                         
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(
+                            'assets/icons/cup.png',
+                            width: 24,
+                            height: 32,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            '$_waterGlasses',
+                            style: const TextStyle(
+                              fontFamily: 'DelaGothicOne',
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.add, color: Colors.white),
+                          onPressed: () {
+                            setState(() {
+                              _waterGlasses++;
+                            });
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.remove, color: Colors.white),
+                          onPressed: () {
+                            setState(() {
+                              if (_waterGlasses > 8) {
+                                _waterGlasses--;
+                              }
+                              if (_waterGlasses == 8) {
+                                _showWaterSticker = true;
+                              }
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              else
+                SizedBox(
+                  height: 40,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (int i = 0; i < 8; i++)
+                        if (i < _waterGlasses)
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _waterGlasses = i;
+                              });
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: Image.asset(
+                                'assets/icons/cup.png',
+                                width: 24,
+                                height: 32,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        else
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _waterGlasses = i + 1;
+                                if (_waterGlasses == 8) {
+                                  _showWaterSticker = true;
+                                }
+                              });
+                            },
+                            child: Stack(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: Image.asset(
+                                    'assets/icons/cup.png',
+                                    width: 24,
+                                    height: 32,
+                                    color: Colors.white.withOpacity(0.3),
+                                  ),
+                                ),
+                                if (i == _waterGlasses)
+                                  Positioned(
+                                    right: 4,
+                                    top: 8,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              _waterGlasses = i + 1;
+                                              if (_waterGlasses == 8) {
+                                                _showWaterSticker = true;
+                                              }
+                                            });
+                                          },
+                                          child: Icon(
+                                            Icons.add,
+                                            size: 16,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              if (_waterGlasses > 0) {
+                                                _waterGlasses = i;
+                                              }
+                                            });
+                                          },
+                                          child: Icon(
+                                            Icons.remove,
+                                            size: 16,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+        if (_showWaterSticker)
+          Positioned(
+            top: 16,
+            right: 16,
+            child: Image.asset(
+              'assets/images/water_sticker.png',
+              width: 48,
+              height: 48,
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildCaloriesCard() {
+    return CaloriesCard(
+      totalCalories: _totalCalories,
+      dailyCalorieGoal: 1900,
+      totalProteins: _totalProteins,
+      totalFats: _totalFats,
+      totalCarbs: _totalCarbs,
+      textColor: Colors.black,
+    );
+  }
+
+  void _onMealAdded(int calories, double proteins, double fats, double carbs) {
+    setState(() {
+      _totalCalories += calories;
+      _totalProteins += proteins;
+      _totalFats += fats;
+      _totalCarbs += carbs;
+    });
+  }
 }
 
 class CaloriesCard extends StatelessWidget {
@@ -309,6 +527,7 @@ class CaloriesCard extends StatelessWidget {
   final double totalProteins;
   final double totalFats;
   final double totalCarbs;
+  final Color textColor;
 
   const CaloriesCard({
     super.key,
@@ -317,6 +536,7 @@ class CaloriesCard extends StatelessWidget {
     required this.totalProteins,
     required this.totalFats,
     required this.totalCarbs,
+    required this.textColor,
   });
 
   @override

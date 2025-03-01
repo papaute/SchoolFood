@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'screens/loading_screen.dart';
 import 'screens/home_screen.dart';  
 import 'screens/profile_screen.dart'; 
 import 'screens/diary_screen.dart'; 
@@ -13,12 +15,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SchoolFood',
+      title: 'Дневник питания',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: const Color(0xFFF5F5DC),
+        primarySwatch: Colors.green,
+        fontFamily: 'Montserrat',
       ),
-      home: const MainScreen(),
+      home: const LoadingScreen(),
     );
   }
 }
@@ -32,9 +35,9 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   
-  static const double _navBarHeight = 60.0;
+  static const double _navBarHeight = 50.0;
   static const double _navBarMargin = 16.0;
-  static const double _iconSize = 32.0;
+  static const double _iconSize =   45.0;
   static const double _iconPadding = 8.0;
 
   int _selectedIndex = 1;  
@@ -42,7 +45,7 @@ class _MainScreenState extends State<MainScreen> {
   
   final List<Widget> _screens = const [
     HomeScreen(),
-    DiaryScreen(),
+    DiaryScreen(showNavBar: true),
     ProfileScreen(),
   ];
 
@@ -52,20 +55,24 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5DC),
       body: _screens[_selectedIndex],
       bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
   Widget _buildBottomNavigationBar() {
-    return Container(
+    return Container( 
+      
       height: _navBarHeight + _navBarMargin * 2,
       margin: const EdgeInsets.all(_navBarMargin),
       child: Stack(
         children: [
+
+          
        
           Image.asset(
             'assets/images/bar.png',
@@ -99,21 +106,14 @@ class _MainScreenState extends State<MainScreen> {
         height: _iconSize + _iconPadding * 2,
         padding: const EdgeInsets.all(_iconPadding),
         decoration: isSelected ? BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.green.shade400,
-              Colors.green.shade600,
-            ],
-          ),
+          
           borderRadius: BorderRadius.circular(25),
         ) : null,
         child: Image.asset(
           iconPath,
           width: _iconSize,
           height: _iconSize,
-          color: isSelected ? Colors.white : Colors.green.shade100,
+          color: const Color.fromARGB(255, 255, 255, 255),
         ),
       ),
     );

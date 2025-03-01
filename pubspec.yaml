@@ -60,6 +60,8 @@ flutter:
     - assets/icons/dish.png
     - assets/icons/profile.png
     - assets/icons/spoon.png
+    - assets/images/water_sticker.png
+    - assets/images/load_screen.png
 
   fonts:
     - family: Montserrat
