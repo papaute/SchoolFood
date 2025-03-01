@@ -13,15 +13,16 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    _startLoadingAnimation();
+    _navigateToMain();
   }
 
-  void _startLoadingAnimation() async {
+  _navigateToMain() async {
     await Future.delayed(const Duration(seconds: 2));
     if (mounted) {
-      Navigator.of(context).pushReplacement(
+      Navigator.pushReplacement(
+        context,
         MaterialPageRoute(
-          builder: (context) => const MainScreen(),
+          builder: (context) => const MainScreen(), // Navigate to MainScreen after loading
         ),
       );
     }
@@ -35,44 +36,50 @@ class _LoadingScreenState extends State<LoadingScreen> {
       overlays: [SystemUiOverlay.top]
     );
 
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/load_screen.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: const Center(
-          child: Column
-           ( mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Здоровое питание –',
-                style: TextStyle(
-                  fontFamily: 'Moncerrat',
-                  fontSize: 32,
-                  color: Color.fromARGB(255, 255, 255, 255),
+   return Scaffold(
+  body: Container(
+    decoration: const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/load_screen.png'),
+        fit: BoxFit.cover, // Растягиваем изображение на весь экран
+      ),
+    ),
+    child: Align(
+      alignment: Alignment.bottomCenter, // Выравниваем содержимое внизу по центру
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 50), // Отступ снизу
+        child: Column(
+          mainAxisSize: MainAxisSize.min, // Минимальный размер Column
+          children: [
+            // Первая строка текста
+            const Text(
+              'Здоровое питание –',
+              style: TextStyle(
+                fontFamily: 'Moncerrat',
+                fontSize: 32,
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center, // Выравнивание текста по центру
+            ),
 
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
+            // Вторая строка текста
+            const Text(
+              'путь к отличным\nзнаниям!',
+              style: TextStyle(
+                fontFamily: 'Moncerrat',
+                fontSize: 32,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
-              Text(
-                'путь к отличным\nзнаниям!',
-                style: TextStyle(
-                  fontFamily:'Moncerrat',
-                  fontSize: 32,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+              textAlign: TextAlign.center, // Выравнивание текста по центру
+            ),
+          ],
         ),
       ),
-    );
+    ),
+  ),
+);
   }
 
   @override
@@ -84,4 +91,4 @@ class _LoadingScreenState extends State<LoadingScreen> {
     );
     super.dispose();
   }
-} 
+}

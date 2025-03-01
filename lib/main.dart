@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'screens/loading_screen.dart';
-import 'screens/home_screen.dart';  
-import 'screens/profile_screen.dart'; 
-import 'screens/diary_screen.dart'; 
+import 'package:flutter_application_1/screens/loading_screen.dart';
+import 'package:flutter_application_1/screens/home_screen.dart';
+import 'package:flutter_application_1/screens/diary_screen.dart';
+import 'package:flutter_application_1/screens/profile_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,15 +33,13 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  
   static const double _navBarHeight = 50.0;
   static const double _navBarMargin = 16.0;
-  static const double _iconSize =   45.0;
+  static const double _iconSize = 45.0;
   static const double _iconPadding = 8.0;
 
-  int _selectedIndex = 1;  
+  int _selectedIndex = 1;
 
-  
   final List<Widget> _screens = const [
     HomeScreen(),
     DiaryScreen(showNavBar: true),
@@ -55,7 +52,7 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5DC),
@@ -65,22 +62,17 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildBottomNavigationBar() {
-    return Container( 
-      
+    return Container(
       height: _navBarHeight + _navBarMargin * 2,
       margin: const EdgeInsets.all(_navBarMargin),
       child: Stack(
         children: [
-
-          
-       
           Image.asset(
             'assets/images/bar.png',
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.fill,
           ),
-          
           Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -98,17 +90,18 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildNavButton(String iconPath, int index) {
     final isSelected = _selectedIndex == index;
-    
+
     return GestureDetector(
       onTap: () => _onItemTapped(index),
       child: Container(
         width: _iconSize + _iconPadding * 2,
         height: _iconSize + _iconPadding * 2,
         padding: const EdgeInsets.all(_iconPadding),
-        decoration: isSelected ? BoxDecoration(
-          
-          borderRadius: BorderRadius.circular(25),
-        ) : null,
+        decoration: isSelected
+            ? BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+              )
+            : null,
         child: Image.asset(
           iconPath,
           width: _iconSize,
@@ -119,4 +112,3 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-
