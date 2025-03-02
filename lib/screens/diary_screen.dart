@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'meals_screen.dart';
+ 
+
+
 
 class AppConstants {
   static const double cardPadding = 20.0;
@@ -32,6 +35,7 @@ class _MealItemState extends State<MealItem> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Column(
       children: [
         Row(
@@ -45,7 +49,7 @@ class _MealItemState extends State<MealItem> {
               ),
               child: Center(
                 child: Text(
-                  '${widget.calories}\nккал',
+                  '${widget.calories}\nккал ',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontFamily: 'Montserrat',
@@ -57,8 +61,8 @@ class _MealItemState extends State<MealItem> {
               ),
             ),
             const SizedBox(width: 16),
-            Text(
-              widget.title,
+            Text( 
+               widget.title,
               style: const TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w700,
@@ -145,7 +149,7 @@ class _MealItemState extends State<MealItem> {
                 GestureDetector(
                   onTap: () {
                     if (customMealController.text.isNotEmpty) {
-                      // Здесь можно добавить логику сохранения нового приема пищи
+                      
                       setState(() {
                         customMealController.clear();
                         isExpanded = false;
@@ -184,9 +188,9 @@ class DiaryScreen extends StatefulWidget {
   final bool showNavBar;
 
   const DiaryScreen({
-    super.key,
-    this.showNavBar = false,
-  });
+    Key? key,
+    required this.showNavBar,
+  }) : super(key: key);
 
   @override
   State<DiaryScreen> createState() => _DiaryScreenState();
@@ -227,297 +231,163 @@ class _DiaryScreenState extends State<DiaryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5DC),
+      backgroundColor: const Color(0xFFEAF1CB),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(
-            AppConstants.spacing,
-            AppConstants.spacing,
-            AppConstants.spacing,
-            widget.showNavBar ? AppConstants.spacing + 92 : AppConstants.spacing,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Привет, Софья!',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w800,
-                      fontSize: 28,
-                      color: Colors.black87,
-                    ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Дневник питания',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Montserrat-Medium',
                   ),
-                  Image.asset(
-                    'assets/images/logo.png',
-                    width: 48,
-                    height: 48,
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppConstants.spacing),
-              _buildCaloriesCard(),
-              const SizedBox(height: AppConstants.spacing),
-              _buildWaterGlasses(),
-              const SizedBox(height: AppConstants.spacing),
-              _buildMealsList(context),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMealsList(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppConstants.cardPadding),
-      decoration: BoxDecoration(
-        image: const DecorationImage(
-          image: AssetImage('assets/images/meals.png'),
-          fit: BoxFit.cover,
-        ),
-        borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-      ),
-      child: Column(
-        children: [
-          MealItem(
-            title: 'Завтрак',
-            calories: meals['Завтрак']!.calories.toString(),
-            onNutritionChanged: (calories, proteins, fats, carbs) =>
-                updateMealNutrition('Завтрак', calories, proteins, fats, carbs),
-          ),
-          const Divider(color: Colors.white24, height: 32),
-          MealItem(
-            title: 'Обед',
-            calories: meals['Обед']!.calories.toString(),
-            onNutritionChanged: (calories, proteins, fats, carbs) =>
-                updateMealNutrition('Обед', calories, proteins, fats, carbs),
-          ),
-          const Divider(color: Colors.white24, height: 32),
-          MealItem(
-            title: 'Ужин',
-            calories: meals['Ужин']!.calories.toString(),
-            onNutritionChanged: (calories, proteins, fats, carbs) =>
-                updateMealNutrition('Ужин', calories, proteins, fats, carbs),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildWaterGlasses() {
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(AppConstants.cardPadding),
-          decoration: BoxDecoration(
-            image: const DecorationImage(
-              image: AssetImage('assets/images/water.png'),
-              fit: BoxFit.cover,
-            ),
-            borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Не забывайте\nпить воду!',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
                 ),
-              ),
-              const SizedBox(height: AppConstants.spacing),
-              if (_waterGlasses >= 8)
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                         color: Colors.white24,
-                         
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Image.asset(
-                            'assets/icons/cup.png',
-                            width: 24,
-                            height: 32,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '$_waterGlasses',
-                            style: const TextStyle(
-                              fontFamily: 'DelaGothicOne',
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Row(
+                const SizedBox(height: 20),
+                // Calories card
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.add, color: Colors.white),
-                          onPressed: () {
-                            setState(() {
-                              _waterGlasses++;
-                            });
-                          },
+                        Text(
+                          'Калории: $_totalCalories / $dailyCalorieGoal',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.remove, color: Colors.white),
-                          onPressed: () {
-                            setState(() {
-                              if (_waterGlasses > 8) {
-                                _waterGlasses--;
-                              }
-                              if (_waterGlasses == 8) {
-                                _showWaterSticker = true;
-                              }
-                            });
-                          },
+                        const SizedBox(height: 10),
+                        LinearProgressIndicator(
+                          value: _totalCalories / dailyCalorieGoal,
+                          backgroundColor: Colors.grey[200],
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            _totalCalories > dailyCalorieGoal 
+                                ? Colors.red 
+                                : Colors.green,
+                          ),
                         ),
                       ],
                     ),
-                  ],
-                )
-              else
-                SizedBox(
-                  height: 40,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (int i = 0; i < 8; i++)
-                        if (i < _waterGlasses)
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _waterGlasses = i;
-                              });
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: Image.asset(
-                                'assets/icons/cup.png',
-                                width: 24,
-                                height: 32,
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
-                        else
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _waterGlasses = i + 1;
-                                if (_waterGlasses == 8) {
-                                  _showWaterSticker = true;
-                                }
-                              });
-                            },
-                            child: Stack(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  child: Image.asset(
-                                    'assets/icons/cup.png',
-                                    width: 24,
-                                    height: 32,
-                                    color: Colors.white.withOpacity(0.3),
-                                  ),
-                                ),
-                                if (i == _waterGlasses)
-                                  Positioned(
-                                    right: 4,
-                                    top: 8,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              _waterGlasses = i + 1;
-                                              if (_waterGlasses == 8) {
-                                                _showWaterSticker = true;
-                                              }
-                                            });
-                                          },
-                                          child: Icon(
-                                            Icons.add,
-                                            size: 16,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              if (_waterGlasses > 0) {
-                                                _waterGlasses = i;
-                                              }
-                                            });
-                                          },
-                                          child: Icon(
-                                            Icons.remove,
-                                            size: 16,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                    ],
                   ),
                 ),
-            ],
-          ),
-        ),
-        if (_showWaterSticker)
-          Positioned(
-            top: 16,
-            right: 16,
-            child: Image.asset(
-              'assets/images/water_sticker.png',
-              width: 48,
-              height: 48,
+                const SizedBox(height: 20),
+                // Nutrients
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Нутриенты',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,  ),
+                       ),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            _buildNutrientInfo('Белки', _totalProteins),
+                            _buildNutrientInfo('Жиры', _totalFats),
+                            _buildNutrientInfo('Углеводы', _totalCarbs),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // Water tracker
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Вода',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('$_waterGlasses стаканов'),
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.remove),
+                                  onPressed: () {
+                                    if (_waterGlasses > 0) {
+                                      setState(() {
+                                        _waterGlasses--;
+                                      });
+                                    }
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.add),
+                                  onPressed: () {
+                                    setState(() {
+                                      _waterGlasses++;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // Meals section
+                ...meals.entries.map((meal) => Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: MealItem(
+                    title: meal.key,
+                    calories: '${meal.value.calories}',
+                    onNutritionChanged: (calories, proteins, fats, carbs) {
+                      updateMealNutrition(meal.key, calories, proteins, fats, carbs);
+                    },
+                  ),
+                )).toList(),
+              ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNutrientInfo(String label, double value) {
+    return Column(
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Text(
+          '${value.toStringAsFixed(1)}г',
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey[600],
+          ),
+        ),
       ],
     );
-  }
-
-  Widget _buildCaloriesCard() {
-    return CaloriesCard(
-      totalCalories: _totalCalories,
-      dailyCalorieGoal: 1900,
-      totalProteins: _totalProteins,
-      totalFats: _totalFats,
-      totalCarbs: _totalCarbs,
-      textColor: Colors.black,
-    );
-  }
-
-  void _onMealAdded(int calories, double proteins, double fats, double carbs) {
-    setState(() {
-      _totalCalories += calories;
-      _totalProteins += proteins;
-      _totalFats += fats;
-      _totalCarbs += carbs;
-    });
   }
 }
 
