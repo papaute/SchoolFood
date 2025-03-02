@@ -1,5 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/meals_screen.dart';
+
+class Dish {
+  final String name;
+  final int calories;
+  final double proteins;
+  final double fats;
+  final double carbs;
+
+  Dish({
+    required this.name,
+    required this.calories,
+    required this.proteins,
+    required this.fats,
+    required this.carbs,
+  });
+}
 
 class MealsScreen extends StatefulWidget {
   final Function(int calories, double proteins, double fats, double carbs) onMealAdded;
@@ -16,134 +31,174 @@ class MealsScreen extends StatefulWidget {
 }
 
 class _MealsScreenState extends State<MealsScreen> {
-  String selectedFilter = 'Все';
-
-  final List<Map<String, dynamic>> dishes = [
-    {'name': 'Картошка с котлетой', 'calories': 400, 'category': 'Мясное', 'image': 'assets/images/potatoes.png'},
-    {'name': 'Борщ', 'calories': 200, 'category': 'Супы', 'image': 'assets/images/borsch.png'},
-    {'name': 'Гречка с сарделькой', 'calories': 350, 'category': 'Мясное', 'image': 'assets/images/grechka.png'},
-    {'name': 'Пельмени', 'calories': 500, 'category': 'Мясное', 'image': 'assets/images/pelmeni.png'},
-    // Add more dishes as needed
+  final List<Dish> dishes = [
+    Dish(
+      name: 'Суп куриный с рисом и томатом',
+      calories: 143,
+      proteins: 6,
+      fats: 5,
+      carbs: 16,
+    ),
+    Dish(
+      name: 'Борщ с мясом и сметаной',
+      calories: 143,
+      proteins: 6,
+      fats: 5,
+      carbs: 16,
+    ),
+    Dish(
+      name: 'Лепешка «Сырная»',
+      calories: 143,
+      proteins: 6,
+      fats: 5,
+      carbs: 16,
+    ),
+    Dish(
+      name: 'Медальоны куриные с томатным соусом и зеленью',
+      calories: 143,
+      proteins: 6,
+      fats: 5,
+      carbs: 16,
+    ),
+    Dish(
+      name: 'Каша гречневая рассыпчатая с маслом',
+      calories: 143,
+      proteins: 6,
+      fats: 5,
+      carbs: 16,
+    ),
+    Dish(
+      name: 'Пельмени отварные с маслом',
+      calories: 143,
+      proteins: 6,
+      fats: 5,
+      carbs: 16,
+    ),
+    Dish(
+      name: 'Рис отварной с маслом',
+      calories: 143,
+      proteins: 6,
+      fats: 200,
+      carbs: 16,
+    ),
+    Dish(
+      name: 'Напиток плодово – ягодный витаминизированный',
+      calories: 143,
+      proteins: 6,
+      fats: 5,
+      carbs: 16,
+    ),
+    Dish(
+      name: 'Спагетти отварные с маслом',
+      calories: 143,
+      proteins: 6,
+      fats: 5,
+      carbs: 16,
+    ),
   ];
 
-  final List<Map<String, dynamic>> mealPlans = [
-    {'title': 'Демократия', 'description': 'Салат с курицей', 'image': 'assets/images/democr.png'},
-    {'title': 'Комплекс Отличный', 'description': 'Мясное блюдо с макаронами', 'image': 'assets/images/most.png'},
-    {'title': 'Завтрак школьника', 'description': '', 'image': 'assets/images/breackfast.png'},
-    // Add more meal plans as needed
-  ];
-
-  List<Map<String, dynamic>> get filteredDishes {
-    if (selectedFilter == 'Все') {
-      return dishes;
-    } else {
-      return dishes.where((dish) => dish['category'] == selectedFilter).toList();
-    }
-  }
-
-  void selectFilter(String filter) {
-    setState(() {
-      selectedFilter = filter;
-    });
-  }
+  bool showAllDishes = true;
+  String searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEAF1CB),
-      body: SingleChildScrollView(
+         
+       
+      backgroundColor: const Color.fromARGB(255, 234, 241, 203),
+      appBar: AppBar(
+        
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF78B04C)),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          widget.mealType,
+          style: const TextStyle(
+            fontFamily: 'DelaGothicOne',
+             
+            fontSize: 20,
+          ),
+        ),
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 234, 241, 203),
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Заголовок «Меню»
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Меню',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, fontFamily: 'Montserrat-Medium', color: Colors.black),
-              ),
-            ),
-            // Фильтры категорий
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FilterButton(
-                    label: 'Все',
-                    isSelected: selectedFilter == 'Все',
-                    onTap: () => selectFilter('Все'),
-                  ),
-                  FilterButton(
-                    label: 'Мясное',
-                    isSelected: selectedFilter == 'Мясное',
-                    onTap: () => selectFilter('Мясное'),
-                  ),
-                  FilterButton(
-                    label: 'Супы',
-                    isSelected: selectedFilter == 'Супы',
-                    onTap: () => selectFilter('Супы'),
-                  ),
-                  FilterButton(
-                    label: 'Веган',
-                    isSelected: selectedFilter == 'Веган',
-                    onTap: () => selectFilter('Веган'),
-                  ),
-                  // Add more filters as needed
-                ],
-              ),
-            ),
-            // Раздел "Планы питания"
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Планы питания',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Montserrat-Medium', color: Colors.black),
-              ),
-            ),
-            SizedBox(
-              height: 200,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: mealPlans.length,
-                itemBuilder: (context, index) {
-                  final plan = mealPlans[index];
-                  return MealPlanCard(
-                    title: plan['title'],
-                    description: plan['description'],
-                    image: plan['image'],
-                  );
-                },
-              ),
-            ),
-            // Раздел "Блюда"
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Блюда',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Montserrat-Medium', color: Colors.black),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16.0,
-                  mainAxisSpacing: 16.0,
-                  childAspectRatio: 1, // Make the cards square
+              child: Container(
+                height: 48,
+                decoration: BoxDecoration(
+                 color: Color(0xFF78B04C),
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: const Color(0xFF78B04C)),
                 ),
-                itemCount: filteredDishes.length,
-                itemBuilder: (context, index) {
-                  final dish = filteredDishes[index];
-                  return DishCard(
-                    name: dish['name'],
-                    calories: dish['calories'],
-                    image: dish['image'],
-                  );
-                },
+                child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value.toLowerCase();
+                    });
+                  },
+                  style: const TextStyle(
+                    fontFamily: 'Montserrat',
+                    color: Color(0xFF78B04C),
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'Поиск блюда',
+                    hintStyle: TextStyle(
+                      fontFamily: 'Montserrat',
+                      color: const Color(0xFF78B04C).withOpacity(0.7),
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      color: Color(0xFF78B04C),
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildFilterButton('Все', showAllDishes, () {
+                  setState(() {
+                    showAllDishes = true;
+                  });
+                }),
+                _buildFilterButton('Мои продукты', !showAllDishes, () {
+                  setState(() {
+                    showAllDishes = false;
+                  });
+                }),
+              ],
+            ),
+            
+            const SizedBox(height: 16),
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                child: ListView(
+                  padding: const EdgeInsets.all(16),
+                  children: dishes
+                      .where((dish) =>
+                          dish.name.toLowerCase().contains(searchQuery))
+                      .map((dish) => _buildDishItem(dish))
+                      .toList(),
+                ),
               ),
             ),
           ],
@@ -151,110 +206,92 @@ class _MealsScreenState extends State<MealsScreen> {
       ),
     );
   }
-}
 
-class FilterButton extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  FilterButton({required this.label, required this.isSelected, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? Colors.green : Colors.transparent,
-        elevation: 0, // Remove shadow
-        textStyle: TextStyle(fontFamily: 'Montserrat-Medium', fontSize: 14, fontWeight: FontWeight.w300),
-      ),
+  Widget _buildFilterButton(String text, bool isActive, VoidCallback onTap) {
+    return TextButton(
       onPressed: onTap,
+      style: TextButton.styleFrom(
+        backgroundColor: isActive ? const Color(0xFF78B04C) : Colors.transparent,
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: BorderSide(
+            color: const Color(0xFF78B04C),
+            width: isActive ? 0 : 2,
+          ),
+        ),
+      ),
       child: Text(
-        label,
+        text,
         style: TextStyle(
-          color: isSelected ? Colors.white : Colors.black,
+          fontFamily: 'DelaGothicOne',
+          color: isActive ? const Color.fromARGB(255, 255, 255, 255) : const Color(0xFF78B04C),
+          fontSize: isActive ? 16 : 14,
         ),
       ),
     );
   }
-}
 
-class MealPlanCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final String image;
-
-  MealPlanCard({required this.title, required this.description, required this.image});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildDishItem(Dish dish) {
     return Container(
-      width: 150,
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFF78B04C)),
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 150,
-            height: 100,
-            child: Image.asset(image, width: double.infinity, fit: BoxFit.contain),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  dish.name,
+                  style: const TextStyle(
+                    fontFamily: 'DelaGothicOne',
+                    color: Color(0xFF78B04C),
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.add_circle,
+                  color: Color(0xFF78B04C),
+                  size: 24,
+                ),
+                onPressed: () {
+                  widget.onMealAdded(
+                    dish.calories,
+                    dish.proteins,
+                    dish.fats,
+                    dish.carbs,
+                  );
+                  Navigator.pop(context);
+                },
+              ),
+            ],
           ),
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              title,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Montserrat-Medium', color: Colors.black),
+          const SizedBox(height: 8),
+          Text(
+            'Ккал ${dish.calories}',
+            style: const TextStyle(
+              fontFamily: 'DelaGothicOne',
+              color: Color(0xFF78B04C),
+              fontSize: 14,
+            ),
+          ),
+          Text(
+            'Белки ${dish.proteins}г  Жиры ${dish.fats}г  Углеводы ${dish.carbs}г',
+            style: const TextStyle(
+              fontFamily: 'DelaGothicOne',
+              color: Color(0xFF78B04C),
+              fontSize: 14,
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class DishCard extends StatelessWidget {
-  final String name;
-  final int calories;
-  final String image;
-
-  DishCard({required this.name, required this.calories, required this.image});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Stack(
-          children: [
-            Image.asset(image, width: double.infinity, height: double.infinity, fit: BoxFit.cover),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Container(
-                padding: const EdgeInsets.all(4.0),
-                decoration: BoxDecoration(
-                  color: Color(0xFF76B53F),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Text(
-                  '$calories ккал',
-                  style: TextStyle(color: Colors.white, fontFamily: 'Montserrat-Medium', fontSize: 14, fontWeight: FontWeight.w300),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 8,
-              left: 8,
-              child: Text(
-                name,
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Montserrat-Medium'),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

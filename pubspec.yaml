@@ -11,11 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-<<<<<<< HEAD
   photo_view: ^0.15.0
-=======
-  pie_chart: ^5.4.0
->>>>>>> 8d9b8489fb21a1c8891ed85de8fa624d5a86c987
+  pie_chart: ^5.3.2
 
 dev_dependencies:
   flutter_test:
@@ -26,8 +23,8 @@ flutter:
   uses-material-design: true
   
   assets:
+    - assets/images/bar.png
     - assets/images/load_screen.png
-<<<<<<< HEAD
     - assets/images/grechka.png
     - assets/images/meals.png
     - assets/images/pelmeni.png
@@ -39,10 +36,24 @@ flutter:
     - assets/images/plans/1_plan.png
     - assets/images/plans/2_plan.png
     - assets/images/plans/3_plan.png
-=======
-    - assets/images/
-    - assets/icons/
->>>>>>> 8d9b8489fb21a1c8891ed85de8fa624d5a86c987
+    - assets/images/calories.png
+    - assets/images/load_screen.png
+    - assets/images/logo.png
+    - assets/images/water_sticker.png
+    - assets/images/water.png
+    - assets/images/splashscreen.png
+    - assets/images/meals.png
+    - assets/icons/cup.png  
+    - assets/icons/dish.png 
+    - assets/icons/profile.png 
+    - assets/icons/spoon.png 
+    - assets/images/walk.png
+    - assets/images/stay.png
+    - assets/images/vitamin.png
+    - assets/images/profilehead.png
+    - assets/images/run.png
+        
+    
 
   fonts:
     - family: Montserrat
